@@ -1,0 +1,22 @@
+name: teamcore
+version: '${project.version}'
+main: org.codecraft.teamcore.Teamcore
+api-version: 1.20
+commands:
+  createworld:
+    description: Create a new world and teleport players to it
+    usage: /createworld <world name> <entity names...>
+    permission: teamcore.createworld
+  deleteworld:
+    description: Deletes a Minecraft world
+    usage: /deleteworld <worldName>
+    permission: teamcore.deleteworld
+  movetoworld:
+    description: Teleports a player to a world
+    usage: /movetoworld <world> <player>
+    permission: teamcore.movetoworld
+  listworlds:
+    description: Lists all worlds
+    usage: /listworlds
+    permission: teamcore.listworlds
+
