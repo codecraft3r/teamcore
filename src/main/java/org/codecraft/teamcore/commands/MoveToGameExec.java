@@ -6,14 +6,16 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.codecraft.teamcore.game.GameData;
+import org.codecraft.teamcore.game.TeamcoreGameManager;
 
-public class MoveToWorldExec implements CommandExecutor {
+public class MoveToGameExec implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (command.getName().equalsIgnoreCase("movetoworld")) {
-            if (args.length < 2) {
-                sender.sendMessage("Usage: /movetoworld <world name> <player names...>");
+        if (command.getName().equalsIgnoreCase("movetogame")) {
+            if (args.length < 1) {
+                sender.sendMessage("Usage: /movetogame <world name> <player names...>");
                 return true;
             }
 
@@ -34,9 +36,18 @@ public class MoveToWorldExec implements CommandExecutor {
                     continue;
                 }
 
+                // Check if player is already in a game
+                GameData game = TeamcoreGameManager.getCurrentGameForPlayer(player.getName());
+                if (game != null) {
+                    // Transfer player from current game to new game
+                    TeamcoreGameManager.removePlayerFromGame(game.getName(), player.getName());
+                    TeamcoreGameManager.addPlayerToGame(worldName, player.getName());
+                }
+
+                // Teleport player to new world
                 player.teleport(world.getSpawnLocation());
-                player.sendMessage("You have been moved to the world: " + worldName);
-                sender.sendMessage(player.getName() + " has been moved to the world: " + worldName);
+                player.sendMessage("You have been moved to the game: "  + "\"" + worldName + "\".");
+                sender.sendMessage("\"" + player.getName() + "\" has been moved to the game: " + "\"" + worldName + "\".");
             }
 
             return true;

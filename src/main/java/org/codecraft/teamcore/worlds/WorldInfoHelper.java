@@ -53,12 +53,6 @@ class WorldInfoHelper {
         return worlds;
     }
 
-    // Add a new WorldInfo object to the list based on worldName
-    public static void addByName(List<WorldInfo> worlds, String worldName) {
-        WorldInfo newWorld = new WorldInfo(worldName);
-        worlds.add(newWorld);
-    }
-
     // Remove a WorldInfo object from the list based on worldName
     public static void removeByName(List<WorldInfo> worlds, String worldName) {
         worlds.removeIf(world -> world.getWorldName().equals(worldName));

@@ -6,20 +6,42 @@ import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.List;
+import java.util.ArrayList;
 
 public class WorldManager {
 
-    public static void createSurvivalWorld(String worldName) {
+    public static List<World> createSurvivalWorld(String worldName) {
+        List<World> createdWorlds = new ArrayList<>();
+
+        // Create Normal world
         WorldCreator worldCreator = new WorldCreator(worldName);
         worldCreator.environment(World.Environment.NORMAL);
-        World world = worldCreator.createWorld();
-        movePlayersToWorld(world, Bukkit.getServer().getOnlinePlayers());
+        World normalWorld = worldCreator.createWorld();
+        movePlayersToWorld(normalWorld, Bukkit.getServer().getOnlinePlayers());
+        createdWorlds.add(normalWorld);
+
+        // Create Nether dimension
+        WorldCreator netherCreator = new WorldCreator(worldName + "_nether");
+        netherCreator.environment(World.Environment.NETHER);
+        World netherWorld = netherCreator.createWorld();
+        movePlayersToWorld(netherWorld, Bukkit.getServer().getOnlinePlayers());
+        createdWorlds.add(netherWorld);
+
+        // Create The End dimension
+        WorldCreator endCreator = new WorldCreator(worldName + "_the_end");
+        endCreator.environment(World.Environment.THE_END);
+        World endWorld = endCreator.createWorld();
+        movePlayersToWorld(endWorld, Bukkit.getServer().getOnlinePlayers());
+        createdWorlds.add(endWorld);
 
         // save world info
         List<WorldInfo> worlds = WorldInfoHelper.loadWorlds();
-        WorldInfoHelper.addByName(worlds, world.getName());
+        worlds.add(new WorldInfo(worldName));
+        worlds.add(new WorldInfo(worldName + "_nether"));
+        worlds.add(new WorldInfo(worldName + "_the_end"));
         WorldInfoHelper.saveWorlds(worlds);
 
+        return createdWorlds;
     }
 
     public static void loadAllWorlds() {

@@ -1,10 +1,11 @@
 package org.codecraft.teamcore;
 
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.codecraft.teamcore.commands.CreateWorldExec;
-import org.codecraft.teamcore.commands.DeleteWorldExec;
-import org.codecraft.teamcore.commands.ListWorldsExec;
-import org.codecraft.teamcore.commands.MoveToWorldExec;
+import org.codecraft.teamcore.commands.*;
+import org.codecraft.teamcore.listeners.PlayerDeathListener;
+import org.codecraft.teamcore.listeners.PlayerJoinListener;
+import org.codecraft.teamcore.listeners.PlayerPortalListener;
 import org.codecraft.teamcore.worlds.WorldManager;
 
 public final class Teamcore extends JavaPlugin {
@@ -15,13 +16,21 @@ public final class Teamcore extends JavaPlugin {
         getLogger().info("Teamcore has been enabled!");
 
         // Register commands
-        getCommand("createworld").setExecutor(new CreateWorldExec());
-        getCommand("movetoworld").setExecutor(new MoveToWorldExec());
-        getCommand("deleteworld").setExecutor(new DeleteWorldExec());
-        getCommand("listworlds").setExecutor(new ListWorldsExec());
+        getCommand("startgame").setExecutor(new StartGameExec());
+        getCommand("movetogame").setExecutor(new MoveToGameExec());
+        getCommand("endgame").setExecutor(new EndGameExec());
+        getCommand("listgames").setExecutor(new ListGamesExec());
+        getCommand("currentworld").setExecutor(new CurrentWorldExec());
 
         // load worlds
         WorldManager.loadAllWorlds();
+
+        // Register listeners
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new PlayerDeathListener(), this);
+        pluginManager.registerEvents(new PlayerJoinListener(), this);
+        pluginManager.registerEvents(new PlayerPortalListener(), this);
     }
 
     @Override
